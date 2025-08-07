@@ -17,6 +17,7 @@ import {
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
 import Calendar from '../components/Calendar';
+import NotificationCenter from '../components/NotificationCenter';
 
 const Dashboard = () => {
     const navigate = useNavigate();
@@ -24,6 +25,7 @@ const Dashboard = () => {
     const { theme, toggleTheme } = useTheme();
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [activeTab, setActiveTab] = useState('calendar');
+    const [notificationCenterOpen, setNotificationCenterOpen] = useState(false);
 
     const handleLogout = async () => {
         try {
@@ -133,6 +135,21 @@ const Dashboard = () => {
                         </div>
                     </div>
 
+                    {/* OpenSource Badge */}
+                    <div className="px-4 py-2">
+                        <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-3">
+                            <div className="flex items-center space-x-2">
+                                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                                <span className="text-xs font-medium text-green-700 dark:text-green-400">
+                                    Modo OpenSource
+                                </span>
+                            </div>
+                            <p className="text-xs text-green-600 dark:text-green-400 mt-1">
+                                Sin dependencias externas
+                            </p>
+                        </div>
+                    </div>
+
                     {/* Navigation */}
                     <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
                         {allowedMenuItems.map((item) => {
@@ -197,7 +214,7 @@ const Dashboard = () => {
                                     {allowedMenuItems.find(item => item.id === activeTab)?.name || 'Dashboard'}
                                 </h1>
                                 <p className="text-sm text-gray-500 dark:text-gray-400">
-                                    Bienvenido, {user?.nombre}
+                                    Bienvenido, {user?.nombre} • Sistema OpenSource
                                 </p>
                             </div>
                         </div>
@@ -217,9 +234,13 @@ const Dashboard = () => {
                             </button>
 
                             {/* Notificaciones */}
-                            <button className="p-2 rounded-lg text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors relative">
+                            <button 
+                                onClick={() => setNotificationCenterOpen(true)}
+                                className="p-2 rounded-lg text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors relative"
+                                title="Notificaciones del sistema"
+                            >
                                 <FaBell className="w-5 h-5" />
-                                <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                                <span className="absolute top-1 right-1 w-2 h-2 bg-green-500 rounded-full" title="Solo notificaciones del sistema"></span>
                             </button>
 
                             {/* Perfil */}
@@ -247,6 +268,12 @@ const Dashboard = () => {
                     </div>
                 </main>
             </div>
+
+            {/* Centro de Notificaciones */}
+            <NotificationCenter 
+                isOpen={notificationCenterOpen}
+                onClose={() => setNotificationCenterOpen(false)}
+            />
         </div>
     );
 };
